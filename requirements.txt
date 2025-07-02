@@ -1,0 +1,5 @@
+streamlit
+twilio
+pyttsx3
+geocoder
+streamlit-js-eval
