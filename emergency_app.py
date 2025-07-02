@@ -1,5 +1,4 @@
 import streamlit as st
-import pyttsx3
 from twilio.rest import Client
 from streamlit_js_eval import streamlit_js_eval
 import geocoder
@@ -7,11 +6,15 @@ import geocoder
 st.set_page_config(page_title="Emergency Assistant", page_icon="🚨")
 st.title("🚨 Emergency AI Assistant")
 
-# Voice Output
-def speak(text):
-    engine = pyttsx3.init()
-    engine.say(text)
-    engine.runAndWait()
+# ✅ Browser-based voice output using JavaScript
+def speak_browser(text: str):
+    st.components.v1.html(f"""
+        <script>
+        const utterance = new SpeechSynthesisUtterance("{text}");
+        utterance.lang = "en-US";
+        window.speechSynthesis.speak(utterance);
+        </script>
+    """, height=0)
 
 # Emergency Classifier
 def classify_emergency(text):
@@ -52,7 +55,7 @@ if "step" not in st.session_state:
     st.session_state.step = 0
 
 if st.button("🆘 Activate Emergency Agent"):
-    speak("What is the emergency?")
+    speak_browser("What is the emergency?")
     st.session_state.step = 1
 
 if st.session_state.step == 1:
